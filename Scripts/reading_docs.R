@@ -72,6 +72,8 @@ read_mom_word_doc <- function(filename) {
   
   ### do other stuff
   
+  ## add tags based on folder (Passover, dessert, ect)
+  
   ### Save as Rdat for now, but if I really want to use Python, I should switch this to JSON
   
   new_recipe <- list(recipe_name = recipe_name, subtitle =recipe_subtitle, ingredients=ingredient_list, method =method)
@@ -84,4 +86,4 @@ read_mom_word_doc <- function(filename) {
 
 pancake_recipe <- read_mom_word_doc("../Recipes/Pancakes.doc")
 
-
+### To DO:  pull in the full dropbox folder of recipes.
