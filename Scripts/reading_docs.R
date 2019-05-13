@@ -51,9 +51,10 @@ read_mom_word_doc <- function(filename) {
   
   
   ## TO DO
-  ## if variation_index == NA, make it equal to n
+  if (length(method_index) == 0){
+    method_index <- n+1
+  } 
   
-
   ## create a list of ingredients
   ingredient_list <- c()
   for (i in (ingredient_index+1):(method_index-1)){
@@ -61,6 +62,11 @@ read_mom_word_doc <- function(filename) {
     ingredient_list <- append(ingredient_list, recipe_list[i])
   }
   
+  
+  
+  if (length(variation_index) == 0){
+    variation_index <- n+1
+  } 
   
   ## create a list for the method
   method <- c()
