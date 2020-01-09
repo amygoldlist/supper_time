@@ -21,7 +21,7 @@ filename <- paste0("../meal_plans/meal_plan-", Sys.Date(), ".txt")
 ### Make a function that picks a random food row, with specifications:
 get_food <- function(not_main = FALSE, not_veg="NA", not_side = "NA", not_des = TRUE,df = food ){
   ## I'm tired, so logic is opposite day
-  food_sub <- food %>% 
+  food_sub <- df %>% 
     filter(!(Main == not_main),
            !(Veggie == not_veg),
            !(Side == not_side),
@@ -57,8 +57,8 @@ random_supper <- function(df =food){
     print(paste("Dinner is ", food_1$Name[1]))
   }
   if(!food_1$Side & food_1$Veggie){
-    print("We need a vegggie but not side")
-    food_2 <- get_food(not_main =TRUE, not_veg=TRUE, not_side = FALSE)
+   # print("We need a vegggie but not side")
+    food_2 <- get_food(not_main =TRUE, not_veg=TRUE, not_side = FALSE, df = df)
   
     print(paste0("Dinner is ", food_1$Name[1], " and ", food_2$Name[1]))
 
@@ -66,16 +66,16 @@ random_supper <- function(df =food){
   
   if(food_1$Side & !food_1$Veggie){
     #print("We need a side but not veggie")
-    food_2 <- get_food(not_main =TRUE, not_veg=FALSE, not_side = TRUE)
+    food_2 <- get_food(not_main =TRUE, not_veg=FALSE, not_side = TRUE, df = df)
     print(paste0("Dinner is ", food_1$Name[1], " and ", food_2$Name[1]))  
   }
   if(!food_1$Side & !food_1$Veggie){
     #print("We need a veggie and a side")
-    food_2 <- get_food(not_main=TRUE, not_veg = FALSE, not_side ="NA")
+    food_2 <- get_food(not_main=TRUE, not_veg = FALSE, not_side ="NA", df = df)
     if(food_1$Side){
       print(paste0("Dinner is ", food_1$Name[1], " and ", food_2$Name[1]))
     } else {
-      food_3 <- get_food(not_main=TRUE, not_veg = TRUE, not_side =FALSE)
+      food_3 <- get_food(not_main=TRUE, not_veg = TRUE, not_side =FALSE, df = df)
       print(paste0("Dinner is ", food_1$Name[1], ", ", food_2$Name[1], ", and ", food_3$Name[1]))
 
     }
@@ -92,9 +92,9 @@ random_supper <- function(df =food){
 amy <- random_supper()
 
 ## Pick a dessert
-yummy_dessert <- function(){
+yummy_dessert <- function(df=food){
   ## This exists because I have two kids looking over my shoulder.
-  yum <- get_food(not_main = TRUE, not_veg = TRUE, not_side=TRUE, not_des = FALSE)
+  yum <- get_food(not_main = TRUE, not_veg = TRUE, not_side=TRUE, not_des = FALSE, df = df)
   print(paste0("Yummy!  Dessert for tonight will be ", yum$Name[1]))
 }
 
@@ -111,13 +111,13 @@ get_meal_plan <- function(n=4, repeat_meals= FALSE, dessert = 2){
     print(paste0("Meal ", i, ":"))
      if(repeat_meals){
        new_df <- random_supper(df=food)
-       print("tacos every day!")
+       #print("tacos every day!")
      }
      else
        {
          ##### THIS IS BUSTED????
        new_df <- random_supper(df=new_df)
-       print("no repeats!!")
+      # print("no repeats!!")
      }
    } 
    ## Also pick some desserts:
@@ -134,6 +134,7 @@ get_meal_plan <- function(n=4, repeat_meals= FALSE, dessert = 2){
 
 ###test:
 sink(filename)
+print(Sys.time())
 get_meal_plan()
 sink()
 
