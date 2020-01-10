@@ -21,6 +21,9 @@ filename <- paste0("../meal_plans/meal_plan-", Sys.Date(), ".txt")
 ### Make a function that picks a random food row, with specifications:
 get_food <- function(not_main = FALSE, not_veg="NA", not_side = "NA", not_des = TRUE,df = food ){
   ## I'm tired, so logic is opposite day
+  
+  ## this function takes in some options, and returns a baby dataframe with just the one row.
+  
   food_sub <- df %>% 
     filter(!(Main == not_main),
            !(Veggie == not_veg),
@@ -34,21 +37,26 @@ get_food <- function(not_main = FALSE, not_veg="NA", not_side = "NA", not_des = 
   return(food_sub[i,])
 }
 
-
+##
 
 ## This builds a random supper with a main, side and veg.
 ## Note: some foods (like beef stew) are a complete meal.
 ## This is reflected in the funtion,  go Amy go!
 
 random_supper <- function(df =food){
+  ## random supper takes in a dataframe (of food)
+  ## it returns a smaller dataframe - with none of the foods!!!
+  
   
   ### these need to be little baby dataframes.....
-  food_1 <- food %>% filter(Name=="")
-  food_2 <- food %>% filter(Name=="")
-  food_3 <- food %>% filter(Name=="")
+  food_1 <- df %>% filter(Name=="")
+  food_2 <- df %>% filter(Name=="")
+  food_3 <- df %>% filter(Name=="")
   
   
   ## get a main course
+  
+  ## food_1 is a datafame 
   food_1 <- get_food(FALSE,"NA", "NA", df = df)
   
   #print(food_1$Name[1])
@@ -57,7 +65,7 @@ random_supper <- function(df =food){
     print(paste("Dinner is ", food_1$Name[1]))
   }
   if(!food_1$Side & food_1$Veggie){
-   # print("We need a vegggie but not side")
+   # print("We need a side but not veg")
     food_2 <- get_food(not_main =TRUE, not_veg=TRUE, not_side = FALSE, df = df)
   
     print(paste0("Dinner is ", food_1$Name[1], " and ", food_2$Name[1]))
@@ -82,7 +90,7 @@ random_supper <- function(df =food){
   }
   
   new_df <- rbind(food_1, food_2, food_3)
-  newer_df <- anti_join(food, new_df)
+  newer_df <- anti_join(df, new_df)
   
 
   return(newer_df)
@@ -102,22 +110,24 @@ yummy_dessert <- function(df=food){
 yummy_dessert()
 
 
-get_meal_plan <- function(n=4, repeat_meals= FALSE, dessert = 2){
+get_meal_plan <- function(n=4, repeat_meals= FALSE, dessert = 2, df = food){
  ### this should generate n meals for the week
   ## It also should handle repeats, TBD
+  ## why isn't it working
   
-   new_df <- food
+  new_df <- df
+   
    for (i in 1:n){
     print(paste0("Meal ", i, ":"))
      if(repeat_meals){
-       new_df <- random_supper(df=food)
-       #print("tacos every day!")
+       new_df <- random_supper(df=df)
+       print("tacos every day!")
      }
      else
        {
          ##### THIS IS BUSTED????
        new_df <- random_supper(df=new_df)
-      # print("no repeats!!")
+      #print("no repeats!!")
      }
    } 
    ## Also pick some desserts:
@@ -127,8 +137,6 @@ get_meal_plan <- function(n=4, repeat_meals= FALSE, dessert = 2){
      yummy_dessert()
    }
 }
-
-###Errrors:  REPEATS
 
 
 
